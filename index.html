@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:">
+<title>ACI Terminal · Public preview</title>
+<style>
+:root{--bg:#07090c;--p:#0e1217;--p2:#141a21;--ln:#1f2730;--tx:#d6dde6;--mu:#8b97a5;--g:#22d37a;--r:#ff5d5d;--a:#ffb020;--b:#4aa8ff;--w:#c9d1d9;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+*{box-sizing:border-box}html{scroll-padding-top:56px}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:32px 32px;background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;background:rgba(7,9,12,.9);z-index:-1}
+a{color:var(--b)}:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.mono,td.n,.tile b{font-family:var(--mono);font-variant-numeric:tabular-nums}
+header.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:14px;padding:8px 16px;background:#05070a;border-bottom:1px solid var(--ln)}
+.brand{font:700 15px var(--mono);color:var(--a);letter-spacing:.08em;white-space:nowrap}.brand span{color:var(--g)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto}nav.tabs a{color:var(--mu);text-decoration:none;padding:6px 10px;border-radius:4px;font:12px var(--mono);text-transform:uppercase;white-space:nowrap}
+nav.tabs a:hover,nav.tabs a.on{color:var(--tx);background:var(--p2)}
+.clock{margin-left:auto;font:12px var(--mono);color:var(--mu);white-space:nowrap}
+main{max-width:1280px;margin:0 auto;padding:14px}
+section{background:var(--p);border:1px solid var(--ln);border-radius:6px;margin:0 0 14px;padding:12px 14px}
+h2{margin:0 0 2px;font:600 13px var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--a)}
+.upd{font:11px var(--mono);color:var(--mu);margin-bottom:10px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.tile{background:var(--p2);border:1px solid var(--ln);border-left:3px solid var(--b);border-radius:4px;padding:8px 10px}
+.tile small{display:block;color:var(--mu);font:11px var(--mono);text-transform:uppercase}.tile b{font-size:20px;display:block}
+.tile.g{border-left-color:var(--g)}.tile.r{border-left-color:var(--r)}.tile.a{border-left-color:var(--a)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.chip{background:var(--p2);color:var(--tx);border:1px solid var(--ln);border-radius:999px;padding:4px 10px;font:12px var(--mono);cursor:pointer}
+.chip[aria-pressed=true]{border-color:var(--a);color:var(--a)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.card{background:var(--p2);border:1px solid var(--ln);border-radius:4px;padding:10px}
+.card h3{margin:0 0 4px;font-size:14px;display:flex;justify-content:space-between;gap:6px}.card p{margin:4px 0;color:var(--mu);font-size:13px}
+.bd{display:inline-block;padding:1px 7px;border-radius:3px;font:600 11px var(--mono);border:1px solid}
+.s-active,.s-g{color:var(--g);border-color:var(--g)}.s-paused,.s-y{color:var(--a);border-color:var(--a)}.s-inactive,.s-w{color:var(--w);border-color:#5b6672}.s-r{color:var(--r);border-color:var(--r)}.s-u{color:var(--b);border-color:var(--b)}
+.bar{height:10px;background:var(--p2);border:1px solid var(--ln);border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g)}
+ol.tl{list-style:none;margin:10px 0 0;padding:0 0 0 14px;border-left:2px solid var(--ln)}
+ol.tl li{position:relative;margin:0 0 10px;padding-left:8px}ol.tl li:before{content:"";position:absolute;left:-21px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--mu)}
+ol.tl li.d:before{background:var(--g);border-color:var(--g)}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--ln);text-align:left;vertical-align:top}th{color:var(--mu);font:600 11px var(--mono);text-transform:uppercase;white-space:nowrap}
+th button{all:unset;cursor:pointer}th button:focus-visible{outline:2px solid var(--a)}td.n{text-align:right;white-space:nowrap}
+.neg{color:var(--r)}.pos{color:var(--g)}
+tr.x td{background:#0a0d11;color:var(--mu);font-size:12px}
+details summary{cursor:pointer;color:var(--b)}
+input[type=search],select{background:var(--p2);color:var(--tx);border:1px solid var(--ln);border-radius:4px;padding:6px 8px;font:13px var(--mono);max-width:100%}
+.hm{display:grid;gap:2px}.hm .c{font:11px var(--mono);padding:4px 2px;text-align:center;border-radius:2px;cursor:default;color:#05070a;min-width:0}
+.hm .h{color:var(--mu);background:none;font-weight:600}.hm .c.st{outline:2px solid var(--r);outline-offset:-2px}
+#tip{position:fixed;pointer-events:none;background:#000;border:1px solid var(--a);padding:6px 8px;font:12px var(--mono);border-radius:4px;display:none;z-index:20;max-width:260px}
+.feed li{list-style:none;padding:5px 0;border-bottom:1px solid var(--ln);display:flex;gap:8px}.feed{padding:0;margin:8px 0 0;max-height:480px;overflow:auto}
+.feed code{color:var(--a)}.feed time{color:var(--mu);font:11px var(--mono);white-space:nowrap}
+.empty{border:1px dashed var(--ln);padding:14px;color:var(--mu);border-radius:4px;text-align:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+footer{color:var(--mu);font:11px var(--mono);text-align:center;padding:10px 0 80px}
+@media(max-width:760px){nav.tabs{position:fixed;bottom:0;left:0;right:0;background:#05070a;border-top:1px solid var(--ln);padding:4px;justify-content:space-between}
+ nav.tabs a{padding:8px 6px;font-size:11px}.clock{display:none}.grid2{grid-template-columns:1fr}main{padding:8px}section{padding:10px}.tile b{font-size:17px}}
+@media(min-width:1800px){body{font-size:16px}main{max-width:1600px}}
+</style></head><body>
+<header class="top"><div class="brand">ACI<span>▮</span>TERM</div>
+<nav class="tabs" aria-label="Sections"><a href="#ov">Overview</a><a href="#ag">Agents</a><a href="#ms">Miles</a><a href="#st">Research</a><a href="#sx">Stats</a></nav>
+<div class="clock">PUBLIC PREVIEW</div></header><main>
+<section id="ov"><h2>Overview</h2><div class="upd" id="u"></div><div class="tiles" id="tiles"></div></section>
+<section id="ag"><h2>Agents</h2><div class="chips" id="agf" role="group" aria-label="Filter agents"></div><div class="cards" id="agc"></div></section>
+<section id="ms"><h2>Milestones</h2><div class="bar"><i id="pb"></i></div><ol class="tl" id="mst"></ol></section>
+<section id="st"><h2>Research &amp; strategies</h2><div class="tw"><table id="stt"></table></div><p class="upd">No setup is validated unless marked VALIDATED. Nothing here is trading advice.</p></section>
+<section id="sx"><h2>General stats</h2><div class="tiles" id="sxt"></div></section>
+<footer>Sanitized public preview of the ACI research project · updated nightly · no trading, holdings or raw data published</footer></main>
+<script>
+const M={"generated":"2026-10-12 08:55 CT","phase":"Phase 2R","progress":{"done":2,"total":4},"agents":[{"name":"Research A","role":"Setup selection","status":"active","updated":"2026-10-11"},{"name":"Research B","role":"Advanced technical analysis","status":"paused","updated":"2026-10-11"},{"name":"Research C","role":"Free stock data","status":"active","updated":"2026-10-11"},{"name":"Quant D","role":"Backtesting & statistics","status":"active","updated":"2026-10-11"},{"name":"Dev E","role":"TradingView indicator development","status":"active","updated":"2026-10-11"},{"name":"Critic F","role":"Adversarial review","status":"active","updated":"2026-10-11"},{"name":"Monitor G","role":"Forward testing","status":"inactive","updated":null}],"milestones":[{"id":"M1","title":"Phase 1 complete","done":true},{"id":"M2R","title":"Revised plan + first functional indicator","done":true},{"id":"M3R","title":"Validation protocol v2 frozen + first setups tested","done":false},{"id":"M4","title":"Consolidated review, then forward-testing approval","done":false}],"strategies":[{"id":"H1","setup":"Pullback from impulse","status":"REJECTED"},{"id":"H2","setup":"Box breakout","status":"UNTESTED"},{"id":"H3","setup":"Trend filter","status":"UNTESTED"},{"id":"S2","setup":"Swing setup S2","status":"UNTESTED"},{"id":"S5a","setup":"Sweep setup S5a","status":"UNTESTED"}],"strategy_counts":{"REJECTED":1,"UNTESTED":4},"stats":{"symbols_covered":24,"intervals":4,"research_archives":2,"recent_backups":6,"backup_status":"OK","last_backup":"2026-10-11"}},$=s=>document.querySelector(s),E=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SC=s=>({VALIDATED:"g",REJECTED:"r",FAILED:"r","IN TESTING":"y"}[s]||"w");
+$("#u").textContent="Generated "+M.generated;const P=M.progress,pct=P.total?Math.round(100*P.done/P.total):0;
+const T=(l,v,c)=>`<div class="tile ${c||""}"><small>${E(l)}</small><b>${E(v)}</b></div>`;
+$("#tiles").innerHTML=T("Phase",M.phase,"a")+T("Agents active",M.agents.filter(a=>a.status=="active").length+"/"+M.agents.length,"g")+T("Milestones",P.done+"/"+P.total+" ("+pct+"%)")+T("Validated setups",M.strategy_counts.VALIDATED||0,"r");
+let af="all";function ag(){$("#agc").innerHTML=M.agents.filter(a=>af=="all"||a.status==af).map(a=>`<div class="card"><h3>${E(a.name)} <span class="bd s-${E(a.status)}">${E(a.status)}</span></h3><p>${E(a.role)}</p><p class="mono">updated ${E(a.updated||"—")}</p></div>`).join("")}
+$("#agf").innerHTML=["all","active","paused","inactive"].map(v=>`<button class="chip" aria-pressed="${v==af}" data-v="${v}">${v}</button>`).join("");
+$("#agf").onclick=e=>{const b=e.target.closest("button");if(!b)return;af=b.dataset.v;[...$("#agf").children].forEach(c=>c.setAttribute("aria-pressed",c==b));ag()};ag();
+$("#pb").style.width=pct+"%";$("#mst").innerHTML=M.milestones.map(x=>`<li class="${x.done?"d":""}"><b class="mono">${E(x.id)}</b> ${E(x.title)} <span class="bd ${x.done?"s-g":"s-w"}">${x.done?"DONE":"OPEN"}</span></li>`).join("");
+$("#stt").innerHTML="<thead><tr><th>ID</th><th>Setup</th><th>Status</th></tr></thead><tbody>"+M.strategies.map(s=>`<tr><td class="mono"><b>${E(s.id)}</b></td><td>${E(s.setup)}</td><td><span class="bd s-${SC(s.status)}">${E(s.status)}</span></td></tr>`).join("")+"</tbody>";
+const S=M.stats;$("#sxt").innerHTML=T("Symbols covered",S.symbols_covered)+T("Intervals",S.intervals)+T("Research archives",S.research_archives)+T("Recent backups",S.recent_backups)+T("Backup health",S.backup_status,S.backup_status=="OK"?"g":"r")+T("Last backup",S.last_backup||"—");
+</script></body></html>
